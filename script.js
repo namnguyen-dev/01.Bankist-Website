@@ -10,7 +10,6 @@ const btnsOpenModal = document.querySelectorAll('.btn--show-modal');
 const btnScrollTo = document.querySelector('.btn--scroll-to');
 const section1 = document.querySelector('#section--1');
 const header = document.querySelector('.header');
-const allSections = document.querySelectorAll('.section');
 const allButtons = document.getElementsByTagName('button');
 const nav = document.querySelector('.nav');
 // Tabbed component
@@ -118,18 +117,39 @@ nav.addEventListener('mouseout', handleHover.bind(1));
 
 //  Sticky navigation: Intersection Observer API
 const navHeight = nav.getBoundingClientRect().height;
-const stickyNav = function(entries) {
+const stickyNav = function (entries) {
   const [entry] = entries;
-  console.log(entry);
-  if (!entry.isIntersecting) nav.classList.add('sticky')
-  else nav.classList.remove('sticky')
-}
+  if (!entry.isIntersecting) nav.classList.add('sticky');
+  else nav.classList.remove('sticky');
+};
 const headerObserver = new IntersectionObserver(stickyNav, {
   root: null,
-  threshold:0,
-  rootMargin: `-${navHeight}px`
+  threshold: 0,
+  rootMargin: `-${navHeight}px`,
 });
 headerObserver.observe(header);
+
+// Reveal Sections
+const allSections = document.querySelectorAll('.section');
+
+const revealSection = function (entries, observer) {
+  const [entry] = entries;
+  console.log(entry);
+  if(!entry.isIntersecting) return;
+  entry.target.classList.remove('section--hidden');
+  observer.unobserve(entry.target)
+};
+
+const sectionObserver = new IntersectionObserver(revealSection, {
+  root: null,
+  threshold: 0.15,
+});
+
+allSections.forEach(function (section) {
+  sectionObserver.observe(section);
+  section.classList.add('section--hidden');
+})
+
 // const obsCallback = function (entries, observer) {
 //   entries.forEach(entry => {
 //     console.log(entry);
@@ -144,12 +164,9 @@ headerObserver.observe(header);
 
 // observer.observe(section1);
 
-
 // const initialCoords = section1.getBoundingClientRect();
 
 // window.addEventListener('scroll', function (e) {
 //   if (window.scrollY > initialCoords.top) nav.classList.add('sticky');
 //   else nav.classList.remove('sticky');
 // });
-
-
