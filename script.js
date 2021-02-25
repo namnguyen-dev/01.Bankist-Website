@@ -255,16 +255,4 @@ dotContainer.addEventListener('click', function (e) {
 
 slider();
 
-document.addEventListener('DOMContentLoaded', function (e) {
-  console.log('HTML parsed n DOM tree built', e);
-})
 
-window.addEventListener('load', function(e) {
-  console.log('page fully loaded',e);
-})
-
-// window.addEventListener('beforeunload', function(e) {
-
-//   console.log('before you go',e);
-//   e.returnValue = 'abc';
-// })
