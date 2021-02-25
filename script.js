@@ -146,7 +146,7 @@ const sectionObserver = new IntersectionObserver(revealSection, {
 
 allSections.forEach(function (section) {
   sectionObserver.observe(section);
-  section.classList.add('section--hidden');
+  // section.classList.add('section--hidden');
 });
 
 // Lazy loading images
@@ -161,7 +161,6 @@ const loadImg = function (entries, observer) {
   entry.target.addEventListener('load', function () {
     entry.target.classList.remove('lazy-img');
   });
-
   observer.unobserve(entry.target);
 };
 
@@ -172,23 +171,47 @@ const imgObserver = new IntersectionObserver(loadImg, {
 });
 
 imgTargets.forEach(img => imgObserver.observe(img));
-// const obsCallback = function (entries, observer) {
-//   entries.forEach(entry => {
-//     console.log(entry);
-//   })
-// };
-// const obsOptions = {
-//   root: null,
-//   threshold: [0, 0.2,],
-// };
 
-// const observer = new IntersectionObserver(obsCallback,obsOptions);
+// Slider
+const slides = document.querySelectorAll('.slide');
+const btnLeft = document.querySelector('.slider__btn--left');
+const btnRight = document.querySelector('.slider__btn--right');
 
-// observer.observe(section1);
+let curSlide = 0;
+const maxSlide = slides.length;
 
-// const initialCoords = section1.getBoundingClientRect();
+// const slider = document.querySelector('.slider');
+// slider.style.transform = `scale(0.3) translateX(-800px)`;
+// slider.style.overflow = `visible`;
 
-// window.addEventListener('scroll', function (e) {
-//   if (window.scrollY > initialCoords.top) nav.classList.add('sticky');
-//   else nav.classList.remove('sticky');
-// });
+const goToSlide = function (slide) {
+  slides.forEach(
+    (s, i) => (s.style.transform = `translateX(${100 * (i - slide)}%)`)
+  );
+};
+
+goToSlide(0);
+
+// Nest slide
+const nextSlide = function () {
+  if (curSlide === maxSlide - 1) {
+    curSlide = 0;
+  } else {
+    curSlide++;
+  }
+  goToSlide(curSlide);
+};
+
+// Previous slide
+const prevSlide = function () {
+  if (curSlide === 0) {
+    curSlide = maxSlide - 1;
+  } else {
+  curSlide--;
+  }
+
+  goToSlide(curSlide);
+}
+
+btnRight.addEventListener('click', nextSlide);
+btnLeft.addEventListener('click', prevSlide)
